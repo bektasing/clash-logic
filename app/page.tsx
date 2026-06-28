@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { ClipboardPaste, Pencil, Info } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { UpgradeJourney } from "@/components/dashboard/upgrade-journey";
-import { TimeSummary } from "@/components/dashboard/time-summary";
+import { GlobalProgress } from "@/components/dashboard/global-progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
@@ -14,6 +14,7 @@ import {
   ParseError,
   type ParseResult,
 } from "@/lib/parser";
+import { calculateGlobalStats } from "@/lib/calculator";
 
 export default function HomePage() {
   const { builderCount } = useSettings();
@@ -83,6 +84,9 @@ export default function HomePage() {
   const showEmptyState =
     hasParsed && (!result || result.groups.length === 0);
 
+  // Calculate global stats
+  const globalStats = result ? calculateGlobalStats(result.groups, result.builderCount) : null;
+
   const header = (
     <>
       <header className="flex items-center justify-end gap-2 border-b border-border bg-card/50 px-4 py-4 sm:px-6">
@@ -125,7 +129,7 @@ export default function HomePage() {
   );
 
   return (
-    <AppShell header={header}>
+    <AppShell header={header} townHallLevel={result?.townHallLevel ?? null} globalStats={globalStats}>
       <div className="flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-6">
         <div className="w-full max-w-3xl space-y-6">
           {!hasParsed && (
@@ -141,25 +145,10 @@ export default function HomePage() {
             </div>
           )}
 
-          {result && result.groups.length > 0 && (
+          {result && result.groups.length > 0 && globalStats && (
             <>
-              {result.townHallLevel !== null && (
-                <div className="flex justify-center">
-                  <span className="rounded-full border border-border/60 bg-card/80 px-4 py-1.5 text-sm text-muted-foreground">
-                    Belediye Binası:{" "}
-                    <span className="font-semibold text-primary">
-                      TH {result.townHallLevel}
-                    </span>
-                  </span>
-                </div>
-              )}
-
+              <GlobalProgress globalStats={globalStats} />
               <UpgradeJourney groups={result.groups} />
-
-              <TimeSummary
-                totalSeconds={result.timeStats.totalSeconds}
-                builderCount={builderCount}
-              />
             </>
           )}
 

@@ -89,16 +89,10 @@ export function buildUpgradePath(
 
   const steps: UpgradeStep[] = [];
 
-  for (let targetLevel = currentLevel + 1; targetLevel <= absoluteMaxLevel; targetLevel++) {
+  // Only include levels that are available at current TH level
+  for (let targetLevel = currentLevel + 1; targetLevel <= thMaxLevel; targetLevel++) {
     const levelData = building.levels.find((l) => l.level === targetLevel);
-    if (!levelData) continue;
-
-    let status: UpgradeStepStatus;
-    if (targetLevel <= thMaxLevel) {
-      status = "available";
-    } else {
-      status = "th_locked";
-    }
+    if (!levelData || levelData.required_th > thLevel) continue;
 
     steps.push({
       level: targetLevel,
@@ -106,12 +100,12 @@ export function buildUpgradePath(
       currency: levelData.currency,
       timeInSeconds: levelData.timeInSeconds,
       requiredTh: levelData.required_th,
-      status,
+      status: "available",
       buildingCount,
     });
   }
 
-  const availableSteps = steps.filter((s) => s.status === "available");
+  const availableSteps = steps;
   const totalCost = availableSteps.reduce(
     (sum, s) => sum + s.cost * s.buildingCount,
     0
@@ -128,59 +122,60 @@ export function buildUpgradePath(
     availableSteps,
     totalCost,
     totalTimeSeconds,
-    currency: availableSteps[0]?.currency ?? steps[0]?.currency ?? null,
+    currency: availableSteps[0]?.currency ?? null,
   };
 }
 
-export function mergeUpgradePaths(paths: UpgradePathResult[]): UpgradePathResult {
-  if (paths.length === 0) {
-    return {
-      steps: [],
-      thMaxLevel: 0,
-      absoluteMaxLevel: 0,
-      availableSteps: [],
-      totalCost: 0,
-      totalTimeSeconds: 0,
-      currency: null,
-    };
-  }
+export interface GlobalStats {
+  totalUpgrades: number;
+  totalCost: number;
+  totalCostElixir: number;
+  totalCostGold: number;
+  totalTimeSeconds: number;
+  builderCount: number;
+}
 
-  const stepMap = new Map<number, UpgradeStep>();
-
-  for (const path of paths) {
-    for (const step of path.steps) {
-      const existing = stepMap.get(step.level);
-      if (existing) {
-        existing.buildingCount += step.buildingCount;
-        existing.cost = step.cost;
-        existing.timeInSeconds = step.timeInSeconds;
-        existing.currency = step.currency;
-        existing.requiredTh = step.requiredTh;
-        if (step.status === "available") existing.status = "available";
-      } else {
-        stepMap.set(step.level, { ...step });
-      }
+export function calculateGlobalStats(
+  groups: { totalPendingUpgrades: number; totalCost: number; totalTimeSeconds: number; currency: Currency | null }[],
+  builderCount: number = 5
+): GlobalStats {
+  const totalUpgrades = groups.reduce((sum, g) => sum + g.totalPendingUpgrades, 0);
+  const totalTimeSeconds = groups.reduce((sum, g) => sum + g.totalTimeSeconds, 0);
+  
+  let totalCostGold = 0;
+  let totalCostElixir = 0;
+  
+  for (const group of groups) {
+    if (group.currency === "gold") {
+      totalCostGold += group.totalCost;
+    } else if (group.currency === "elixir") {
+      totalCostElixir += group.totalCost;
     }
   }
-
-  const steps = Array.from(stepMap.values()).sort((a, b) => a.level - b.level);
-  const availableSteps = steps.filter((s) => s.status === "available");
-
+  
+  const totalCost = totalCostGold + totalCostElixir;
+  
   return {
-    steps,
-    thMaxLevel: paths[0].thMaxLevel,
-    absoluteMaxLevel: paths[0].absoluteMaxLevel,
-    availableSteps,
-    totalCost: availableSteps.reduce(
-      (sum, s) => sum + s.cost * s.buildingCount,
-      0
-    ),
-    totalTimeSeconds: availableSteps.reduce(
-      (sum, s) => sum + s.timeInSeconds * s.buildingCount,
-      0
-    ),
-    currency: availableSteps[0]?.currency ?? steps[0]?.currency ?? null,
+    totalUpgrades,
+    totalCost,
+    totalCostElixir,
+    totalCostGold,
+    totalTimeSeconds,
+    builderCount,
   };
+}
+
+export function calculateTotalPendingUpgrades(
+  instances: { level: number }[],
+  buildingId: number,
+  thLevel: number
+): number {
+  const thMaxLevel = getMaxLevelForTH(buildingId, thLevel);
+  
+  return instances.reduce((total, instance) => {
+    const pendingLevels = Math.max(0, thMaxLevel - instance.level);
+    return total + pendingLevels;
+  }, 0);
 }
 
 export function formatCost(cost: number, currency: Currency): string {

@@ -54,5 +54,174 @@
       { "level": 20, "required_th": 14, "cost": 2600000, "currency": "gold", "timeInSeconds": 86400 },
       { "level": 21, "required_th": 15, "cost": 3000000, "currency": "gold", "timeInSeconds": 129600 }
     ]
+  },
+  {
+    "id": 1000011,
+    "name": "Büyücü Kulesi",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 5, "cost": 100000, "currency": "gold", "timeInSeconds": 3600 },
+      { "level": 2, "required_th": 5, "cost": 150000, "currency": "gold", "timeInSeconds": 5400 },
+      { "level": 3, "required_th": 6, "cost": 250000, "currency": "gold", "timeInSeconds": 14400 },
+      { "level": 4, "required_th": 7, "cost": 400000, "currency": "gold", "timeInSeconds": 28800 },
+      { "level": 5, "required_th": 8, "cost": 550000, "currency": "gold", "timeInSeconds": 36000 },
+      { "level": 6, "required_th": 8, "cost": 660000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 7, "required_th": 9, "cost": 1000000, "currency": "gold", "timeInSeconds": 64800 },
+      { "level": 8, "required_th": 10, "cost": 1100000, "currency": "gold", "timeInSeconds": 72000 },
+      { "level": 9, "required_th": 10, "cost": 1300000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 10, "required_th": 11, "cost": 2000000, "currency": "gold", "timeInSeconds": 108000 },
+      { "level": 11, "required_th": 12, "cost": 2500000, "currency": "gold", "timeInSeconds": 129600 },
+      { "level": 12, "required_th": 13, "cost": 2600000, "currency": "gold", "timeInSeconds": 151200 },
+      { "level": 13, "required_th": 13, "cost": 3000000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 14, "required_th": 14, "cost": 4500000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 15, "required_th": 15, "cost": 5500000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 16, "required_th": 16, "cost": 8000000, "currency": "gold", "timeInSeconds": 388800 },
+      { "level": 17, "required_th": 17, "cost": 14000000, "currency": "gold", "timeInSeconds": 475200 }
+    ]
+  },
+  {
+    "id": 1000013,
+    "name": "Havan",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 3, "cost": 5000, "currency": "gold", "timeInSeconds": 1800 },
+      { "level": 2, "required_th": 4, "cost": 25000, "currency": "gold", "timeInSeconds": 3600 },
+      { "level": 3, "required_th": 5, "cost": 90000, "currency": "gold", "timeInSeconds": 7200 },
+      { "level": 4, "required_th": 6, "cost": 180000, "currency": "gold", "timeInSeconds": 10800 },
+      { "level": 5, "required_th": 7, "cost": 300000, "currency": "gold", "timeInSeconds": 21600 },
+      { "level": 6, "required_th": 8, "cost": 500000, "currency": "gold", "timeInSeconds": 28800 },
+      { "level": 7, "required_th": 9, "cost": 900000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 8, "required_th": 10, "cost": 1200000, "currency": "gold", "timeInSeconds": 64800 },
+      { "level": 9, "required_th": 11, "cost": 1600000, "currency": "gold", "timeInSeconds": 72000 },
+      { "level": 10, "required_th": 11, "cost": 1800000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 11, "required_th": 12, "cost": 2300000, "currency": "gold", "timeInSeconds": 108000 },
+      { "level": 12, "required_th": 12, "cost": 2400000, "currency": "gold", "timeInSeconds": 129600 },
+      { "level": 13, "required_th": 13, "cost": 2800000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 14, "required_th": 14, "cost": 4300000, "currency": "gold", "timeInSeconds": 216000 },
+      { "level": 15, "required_th": 15, "cost": 5000000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 16, "required_th": 16, "cost": 7000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 17, "required_th": 17, "cost": 13000000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 18, "required_th": 18, "cost": 21000000, "currency": "gold", "timeInSeconds": 1080000 }
+    ]
+  },
+  {
+    "id": 1000012,
+    "name": "Hava Savunması",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 4, "cost": 22000, "currency": "gold", "timeInSeconds": 3600 },
+      { "level": 2, "required_th": 4, "cost": 90000, "currency": "gold", "timeInSeconds": 7200 },
+      { "level": 3, "required_th": 5, "cost": 210000, "currency": "gold", "timeInSeconds": 21600 },
+      { "level": 4, "required_th": 6, "cost": 500000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 5, "required_th": 7, "cost": 800000, "currency": "gold", "timeInSeconds": 64800 },
+      { "level": 6, "required_th": 8, "cost": 1000000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 7, "required_th": 9, "cost": 1750000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 8, "required_th": 10, "cost": 2300000, "currency": "gold", "timeInSeconds": 216000 },
+      { "level": 9, "required_th": 11, "cost": 3400000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 10, "required_th": 12, "cost": 5000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 11, "required_th": 13, "cost": 5600000, "currency": "gold", "timeInSeconds": 388800 },
+      { "level": 12, "required_th": 14, "cost": 6500000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 13, "required_th": 15, "cost": 8000000, "currency": "gold", "timeInSeconds": 518400 },
+      { "level": 14, "required_th": 16, "cost": 9000000, "currency": "gold", "timeInSeconds": 561600 },
+      { "level": 15, "required_th": 17, "cost": 15000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 16, "required_th": 18, "cost": 26000000, "currency": "gold", "timeInSeconds": 1144800 }
+    ]
+  },
+  {
+    "id": 1000028,
+    "name": "Hava Patlatıcı",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 6, "cost": 200000, "currency": "gold", "timeInSeconds": 14400 },
+      { "level": 2, "required_th": 6, "cost": 300000, "currency": "gold", "timeInSeconds": 21600 },
+      { "level": 3, "required_th": 7, "cost": 450000, "currency": "gold", "timeInSeconds": 28800 },
+      { "level": 4, "required_th": 8, "cost": 800000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 5, "required_th": 9, "cost": 1200000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 6, "required_th": 10, "cost": 1900000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 7, "required_th": 11, "cost": 3400000, "currency": "gold", "timeInSeconds": 259200 }
+    ]
+  },
+  {
+    "id": 1000019,
+    "name": "Gizli Tesla",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 7, "cost": 250000, "currency": "gold", "timeInSeconds": 7200 },
+      { "level": 2, "required_th": 7, "cost": 350000, "currency": "gold", "timeInSeconds": 10800 },
+      { "level": 3, "required_th": 7, "cost": 500000, "currency": "gold", "timeInSeconds": 14400 },
+      { "level": 4, "required_th": 8, "cost": 600000, "currency": "gold", "timeInSeconds": 21600 },
+      { "level": 5, "required_th": 8, "cost": 800000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 6, "required_th": 8, "cost": 1200000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 7, "required_th": 9, "cost": 1400000, "currency": "gold", "timeInSeconds": 108000 },
+      { "level": 8, "required_th": 10, "cost": 1600000, "currency": "gold", "timeInSeconds": 129600 },
+      { "level": 9, "required_th": 11, "cost": 2100000, "currency": "gold", "timeInSeconds": 151200 },
+      { "level": 10, "required_th": 12, "cost": 3000000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 11, "required_th": 13, "cost": 3100000, "currency": "gold", "timeInSeconds": 216000 },
+      { "level": 12, "required_th": 13, "cost": 3700000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 13, "required_th": 14, "cost": 5100000, "currency": "gold", "timeInSeconds": 302400 },
+      { "level": 14, "required_th": 15, "cost": 6500000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 15, "required_th": 16, "cost": 8200000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 16, "required_th": 17, "cost": 15000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 17, "required_th": 18, "cost": 25000000, "currency": "gold", "timeInSeconds": 1123200 }
+    ]
+  },
+  {
+    "id": 1000023,
+    "name": "Bomba Kulesi",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 8, "cost": 700000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 2, "required_th": 8, "cost": 1000000, "currency": "gold", "timeInSeconds": 64800 },
+      { "level": 3, "required_th": 9, "cost": 1300000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 4, "required_th": 10, "cost": 1800000, "currency": "gold", "timeInSeconds": 129600 },
+      { "level": 5, "required_th": 11, "cost": 1900000, "currency": "gold", "timeInSeconds": 151200 },
+      { "level": 6, "required_th": 11, "cost": 2000000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 7, "required_th": 12, "cost": 4000000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 8, "required_th": 13, "cost": 5000000, "currency": "gold", "timeInSeconds": 302400 },
+      { "level": 9, "required_th": 14, "cost": 6000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 10, "required_th": 15, "cost": 7000000, "currency": "gold", "timeInSeconds": 388800 },
+      { "level": 11, "required_th": 16, "cost": 8500000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 12, "required_th": 17, "cost": 14500000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 13, "required_th": 18, "cost": 25000000, "currency": "gold", "timeInSeconds": 1123200 }
+    ]
+  },
+  {
+    "id": 1000014,
+    "name": "X-Yayı",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 9, "cost": 1000000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 2, "required_th": 9, "cost": 1200000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 3, "required_th": 9, "cost": 2400000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 4, "required_th": 10, "cost": 2500000, "currency": "gold", "timeInSeconds": 216000 },
+      { "level": 5, "required_th": 11, "cost": 3900000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 6, "required_th": 12, "cost": 5000000, "currency": "gold", "timeInSeconds": 302400 },
+      { "level": 7, "required_th": 13, "cost": 6000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 8, "required_th": 13, "cost": 7000000, "currency": "gold", "timeInSeconds": 388800 },
+      { "level": 9, "required_th": 14, "cost": 9000000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 10, "required_th": 15, "cost": 9500000, "currency": "gold", "timeInSeconds": 475200 },
+      { "level": 11, "required_th": 16, "cost": 10000000, "currency": "gold", "timeInSeconds": 518400 },
+      { "level": 12, "required_th": 17, "cost": 16000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 13, "required_th": 18, "cost": 26000000, "currency": "gold", "timeInSeconds": 1166400 }
+    ]
+  },
+  {
+    "id": 1000016,
+    "name": "Cehennem Kulesi",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 10, "cost": 1000000, "currency": "gold", "timeInSeconds": 43200 },
+      { "level": 2, "required_th": 10, "cost": 1200000, "currency": "gold", "timeInSeconds": 86400 },
+      { "level": 3, "required_th": 10, "cost": 2400000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 4, "required_th": 11, "cost": 3400000, "currency": "gold", "timeInSeconds": 216000 },
+      { "level": 5, "required_th": 11, "cost": 4200000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 6, "required_th": 12, "cost": 6000000, "currency": "gold", "timeInSeconds": 302400 },
+      { "level": 7, "required_th": 13, "cost": 8000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 8, "required_th": 14, "cost": 9500000, "currency": "gold", "timeInSeconds": 518400 },
+      { "level": 9, "required_th": 15, "cost": 10000000, "currency": "gold", "timeInSeconds": 561600 },
+      { "level": 10, "required_th": 16, "cost": 11000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 11, "required_th": 17, "cost": 16000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 12, "required_th": 18, "cost": 26500000, "currency": "gold", "timeInSeconds": 1166400 }
+    ]
   }
 ]

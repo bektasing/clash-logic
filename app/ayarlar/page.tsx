@@ -26,7 +26,7 @@ export default function AyarlarPage() {
   }
 
   return (
-    <AppShell>
+    <AppShell townHallLevel={null} globalStats={null}>
       <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-6">
         <div className="w-full max-w-md space-y-6">
           <div>

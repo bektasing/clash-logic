@@ -1,7 +1,7 @@
 import buildingMap from "@/constants/building_map.json";
 import {
   buildUpgradePath,
-  mergeUpgradePaths,
+  calculateTotalPendingUpgrades,
   type Currency,
   type UpgradeStep,
 } from "@/lib/calculator";
@@ -9,7 +9,12 @@ import {
 export type BuildingMap = Record<string, string>;
 
 export const TOWN_HALL_ID = "1000001";
-export const ALLOWED_BUILDING_IDS = new Set(["1000008", "1000009"]);
+export const ALLOWED_BUILDING_IDS = new Set([
+  "1000008", "1000009", // Cannon, Archer Tower
+  "1000011", "1000012", "1000013", // Wizard Tower, Air Defense, Mortar
+  "1000014", "1000016", "1000019", // X-Bow, Inferno Tower, Hidden Tesla
+  "1000023", "1000028" // Bomb Tower, Air Sweeper
+]);
 
 export interface RawBuildingEntry {
   data: number;
@@ -17,22 +22,31 @@ export interface RawBuildingEntry {
   lvl?: number;
 }
 
-export interface BuildingGroup {
-  id: string;
-  name: string;
-  count: number;
-  levelSummary: string;
-  minLevel: number;
-  maxLevelAmongBuildings: number;
-  thMaxLevel: number;
-  targetLevel: number;
+export interface BuildingInstance {
+  instanceId: string;
+  instanceNumber: number;
+  level: number;
   upgradePath: UpgradeStep[];
   totalCost: number;
   totalTimeSeconds: number;
   currency: Currency | null;
-  statusMessage: string | null;
-  isMaxLevel: boolean;
   hasUpgrades: boolean;
+  isFullyUpgraded: boolean;
+  statusMessage: string | null;
+}
+
+export interface BuildingGroup {
+  id: string;
+  name: string;
+  count: number;
+  instances: BuildingInstance[];
+  totalCost: number;
+  totalTimeSeconds: number;
+  currency: Currency | null;
+  levelSummary: string;
+  minLevel: number;
+  maxLevelAmongBuildings: number;
+  totalPendingUpgrades: number;
 }
 
 export interface TimeStats {
@@ -43,6 +57,7 @@ export interface ParseResult {
   groups: BuildingGroup[];
   townHallLevel: number | null;
   timeStats: TimeStats;
+  builderCount: number;
 }
 
 export type ParseErrorCode = "INVALID_JSON" | "NO_DATA";
@@ -147,35 +162,12 @@ function formatLevelSummary(instances: LevelInstance[]): string {
   return `${min}–${max}`;
 }
 
-function buildStatusMessage(
-  minLevel: number,
-  thMaxLevel: number,
-  absoluteMaxLevel: number,
-  hasUpgrades: boolean,
-  townHallLevel: number | null
+function buildInstanceStatus(
+  hasUpgrades: boolean
 ): string | null {
-  if (townHallLevel === null) {
-    return "Belediye Binası seviyesi tespit edilemedi";
-  }
-
   if (!hasUpgrades) {
-    if (minLevel >= absoluteMaxLevel) {
-      return "Maksimum seviyeye ulaşıldı";
-    }
-    if (minLevel >= thMaxLevel) {
-      return "Daha Yükselemez — TH sınırına ulaşıldı";
-    }
+    return "Tamamen Yükseltildi";
   }
-
-  const nextLocked = thMaxLevel < absoluteMaxLevel;
-  if (nextLocked && !hasUpgrades && minLevel >= thMaxLevel) {
-    const nextTh =
-      absoluteMaxLevel > thMaxLevel
-        ? `TH ${thMaxLevel + 1}`
-        : null;
-    if (nextTh) return `Daha Yükselemez — ${nextTh}'te devam eder`;
-  }
-
   return null;
 }
 
@@ -185,56 +177,74 @@ function buildBuildingGroup(
 ): BuildingGroup {
   const buildingId = Number(group.id);
   const name = resolveBuildingName(buildingId) ?? `Bilinmeyen Bina: ${group.id}`;
-  const totalCount = group.instances.reduce((sum, i) => sum + i.count, 0);
-  const levelSummary = formatLevelSummary(group.instances);
+  const effectiveTH = townHallLevel ?? 1;
+
+  // Create individual instances
+  const instances: BuildingInstance[] = [];
+  let instanceCounter = 0;
+
+  for (const entry of group.instances) {
+    for (let i = 0; i < entry.count; i++) {
+      instanceCounter++;
+      const instanceId = `${group.id}-${instanceCounter}`;
+
+      const path = buildUpgradePath(
+        buildingId,
+        entry.level,
+        effectiveTH,
+        1
+      );
+
+      const hasUpgrades = path.availableSteps.length > 0;
+      const isFullyUpgraded = !hasUpgrades;
+      const statusMessage = buildInstanceStatus(hasUpgrades);
+
+      instances.push({
+        instanceId,
+        instanceNumber: instanceCounter,
+        level: entry.level,
+        upgradePath: path.steps,
+        totalCost: path.totalCost,
+        totalTimeSeconds: path.totalTimeSeconds,
+        currency: path.currency,
+        hasUpgrades,
+        isFullyUpgraded,
+        statusMessage,
+      });
+    }
+  }
+
+  // Calculate group totals
+  const totalCost = instances.reduce((sum, inst) => sum + inst.totalCost, 0);
+  const totalTimeSeconds = instances.reduce((sum, inst) => sum + inst.totalTimeSeconds, 0);
+  const currency = instances.find(i => i.currency)?.currency ?? null;
+
   const levels = group.instances.flatMap((i) =>
     Array(i.count).fill(i.level) as number[]
   );
   const minLevel = Math.min(...levels);
   const maxLevelAmongBuildings = Math.max(...levels);
+  const levelSummary = formatLevelSummary(group.instances);
 
-  const effectiveTH = townHallLevel ?? 1;
-
-  const paths = group.instances.map((instance) =>
-    buildUpgradePath(
-      buildingId,
-      instance.level,
-      effectiveTH,
-      instance.count
-    )
-  );
-
-  const merged = mergeUpgradePaths(paths);
-
-  const hasUpgrades = merged.availableSteps.length > 0;
-  const isMaxLevel =
-    minLevel >= merged.absoluteMaxLevel ||
-    (minLevel >= merged.thMaxLevel && !hasUpgrades);
-
-  const statusMessage = buildStatusMessage(
-    minLevel,
-    merged.thMaxLevel,
-    merged.absoluteMaxLevel,
-    hasUpgrades,
-    townHallLevel
+  // Calculate total pending upgrades
+  const totalPendingUpgrades = calculateTotalPendingUpgrades(
+    group.instances,
+    buildingId,
+    effectiveTH
   );
 
   return {
     id: group.id,
     name,
-    count: totalCount,
+    count: instances.length,
+    instances,
+    totalCost,
+    totalTimeSeconds,
+    currency,
     levelSummary,
     minLevel,
     maxLevelAmongBuildings,
-    thMaxLevel: merged.thMaxLevel,
-    targetLevel: merged.thMaxLevel,
-    upgradePath: merged.steps,
-    totalCost: merged.totalCost,
-    totalTimeSeconds: merged.totalTimeSeconds,
-    currency: merged.currency,
-    statusMessage,
-    isMaxLevel,
-    hasUpgrades,
+    totalPendingUpgrades,
   };
 }
 
@@ -266,6 +276,7 @@ export function parseClashData(input: string): ParseResult {
     groups,
     townHallLevel,
     timeStats: { totalSeconds },
+    builderCount: 5,
   };
 }
 
