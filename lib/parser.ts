@@ -32,6 +32,7 @@ export interface BuildingInstance {
 export interface BuildingGroup {
   id: string;
   name: string;
+  category: string;
   count: number;
   instances: BuildingInstance[];
   totalCost: number;
@@ -155,7 +156,8 @@ function groupByBuildingId(entries: RawBuildingEntry[]): GroupAccumulator[] {
 
   for (const entry of entries) {
     const id = String(entry.data);
-    if (!getUpgradeBuilding(Number(id))) continue;
+    // Ensure builder hut is always considered even if upgrade-data is missing
+    if (!getUpgradeBuilding(Number(id)) && id !== BUILDER_HUT_ID) continue;
 
     const level = entry.lvl ?? 1;
     const count = entry.cnt ?? 1;
@@ -196,9 +198,22 @@ function buildBuildingGroup(
 ): BuildingGroup | null {
   const buildingId = Number(group.id);
   const building = getUpgradeBuilding(buildingId);
-  if (!building) return null;
+  let name: string;
+  let category = "Other";
 
-  const name = building.name;
+  if (!building) {
+    // Fallback: if this is the builder hut, provide a default name so it is rendered
+    if (String(buildingId) === BUILDER_HUT_ID) {
+      name = "İnşaatçı Kulübesi";
+      category = "Army";
+    } else {
+      return null;
+    }
+  } else {
+    name = building.name;
+    category = building.category ?? "Other";
+  }
+
   const effectiveTH = townHallLevel ?? 1;
 
   // Create individual instances
@@ -259,6 +274,7 @@ function buildBuildingGroup(
   return {
     id: group.id,
     name,
+    category,
     count: instances.length,
     instances,
     totalCost,
@@ -295,10 +311,25 @@ export function parseClashData(input: string): ParseResult {
     .map((g) => buildBuildingGroup(g, townHallLevel))
     .filter((group): group is BuildingGroup => group !== null);
 
+  // If there is no explicit builder hut group but we detected builders, add a synthetic group
+  const hasBuilderGroup = groups.some((g) => String(g.id) === BUILDER_HUT_ID);
+  if (!hasBuilderGroup && builderCount > 0) {
+    const syntheticGroup = buildBuildingGroup({ id: BUILDER_HUT_ID, instances: [{ level: 1, count: builderCount }] }, townHallLevel);
+    if (syntheticGroup) {
+      groups.push(syntheticGroup);
+    }
+  }
+
   const totalSeconds = groups.reduce(
     (sum, g) => sum + g.totalTimeSeconds,
     0
   );
+
+  // Debug: expose grouped ids for client-side troubleshooting
+  try {
+    // eslint-disable-next-line no-console
+    console.debug("parseClashData: groups=", groups.map((g) => ({ id: g.id, name: g.name, count: g.count })));
+  } catch {}
 
   return {
     groups,

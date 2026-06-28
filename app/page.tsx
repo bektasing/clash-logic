@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { ClipboardPaste, Pencil, Info } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { UpgradeJourney } from "@/components/dashboard/upgrade-journey";
+import { DashboardSections } from "@/components/dashboard/dashboard-sections";
 import { GlobalProgress } from "@/components/dashboard/global-progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -150,7 +151,7 @@ export default function HomePage() {
           {result && result.groups.length > 0 && globalStats && (
             <>
               <GlobalProgress globalStats={globalStats} />
-              <UpgradeJourney groups={result.groups} />
+              <DashboardSections groups={result.groups} />
             </>
           )}
 

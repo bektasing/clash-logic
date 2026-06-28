@@ -136,16 +136,19 @@ export interface GlobalStats {
 }
 
 export function calculateGlobalStats(
-  groups: { totalPendingUpgrades: number; totalCost: number; totalTimeSeconds: number; currency: Currency | null }[],
-  builderCount: number = 5
+  groups: { totalPendingUpgrades: number; totalCost: number; totalTimeSeconds: number; currency: Currency | null; category?: string }[],
+  builderCount: number = 5,
+  categoryFilter?: string
 ): GlobalStats {
-  const totalUpgrades = groups.reduce((sum, g) => sum + g.totalPendingUpgrades, 0);
-  const totalTimeSeconds = groups.reduce((sum, g) => sum + g.totalTimeSeconds, 0);
+  const filtered = typeof categoryFilter === "string" ? groups.filter(g => g.category === categoryFilter) : groups;
+
+  const totalUpgrades = filtered.reduce((sum, g) => sum + g.totalPendingUpgrades, 0);
+  const totalTimeSeconds = filtered.reduce((sum, g) => sum + g.totalTimeSeconds, 0);
   
   let totalCostGold = 0;
   let totalCostElixir = 0;
   
-  for (const group of groups) {
+  for (const group of filtered) {
     if (group.currency === "gold") {
       totalCostGold += group.totalCost;
     } else if (group.currency === "elixir") {
@@ -163,6 +166,26 @@ export function calculateGlobalStats(
     totalTimeSeconds,
     builderCount,
   };
+}
+
+export function calculateStatsByCategory(
+  groups: { totalPendingUpgrades: number; totalCost: number; totalTimeSeconds: number; currency: Currency | null; category?: string }[],
+  builderCount: number = 5
+): Record<string, GlobalStats> {
+  const map = new Map<string, typeof groups>();
+  for (const g of groups) {
+    const cat = g.category ?? "Other";
+    const arr = map.get(cat) ?? [];
+    arr.push(g);
+    map.set(cat, arr);
+  }
+
+  const result: Record<string, GlobalStats> = {};
+  for (const [cat, arr] of map.entries()) {
+    result[cat] = calculateGlobalStats(arr, builderCount);
+  }
+
+  return result;
 }
 
 export function calculateTotalPendingUpgrades(
