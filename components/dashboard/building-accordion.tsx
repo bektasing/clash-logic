@@ -54,7 +54,7 @@ function InstanceRow({ instance, buildingName }: { instance: BuildingInstance; b
             {buildingName} #{instance.instanceNumber}
           </span>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span>{instance.level}/20</span>
+            <span>{instance.level}/{instance.maxLevel}</span>
           </div>
         </div>
       </div>
@@ -92,6 +92,55 @@ function InstanceRow({ instance, buildingName }: { instance: BuildingInstance; b
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function WallManagementCard({ group }: { group: BuildingGroup }) {
+  const levelCounts = group.instances.reduce<Record<number, number>>((acc, instance) => {
+    acc[instance.level] = (acc[instance.level] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  const sortedLevels = Object.keys(levelCounts)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  return (
+    <div className="space-y-4 px-4 py-4">
+      <div className="rounded-xl border border-border/40 bg-card/20 p-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-foreground">Duvar Yönetimi</p>
+            <p className="text-xs text-muted-foreground">
+              Duvarları seviye bazında say ve toplam yükseltme maliyetini hesapla.
+            </p>
+          </div>
+          <div className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            {group.count} Duvar
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {sortedLevels.map((level) => (
+            <div key={level} className="rounded-xl bg-[#0f172a] p-3 text-sm text-foreground">
+              <div className="flex items-center justify-between gap-2">
+                <span>Seviye {level}</span>
+                <span className="font-semibold text-primary">{levelCounts[level]}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-lg bg-primary/5 p-3 text-sm text-muted-foreground">
+          <div className="flex items-center justify-between gap-3">
+            <span>Toplam yükseltme maliyeti</span>
+            <span className="font-semibold text-foreground">
+              {group.currency ? formatCost(group.totalCost, group.currency as Currency) : "0"}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -172,15 +221,19 @@ function GroupRow({ group }: { group: BuildingGroup }) {
       {/* Expanded content */}
       {expanded && hasInstances && (
         <div className="border-t border-border/40 bg-[#121e2e]">
-          <div>
-            {group.instances.map((instance) => (
-              <InstanceRow
-                key={instance.instanceId}
-                instance={instance}
-                buildingName={group.name}
-              />
-            ))}
-          </div>
+          {group.isWall ? (
+            <WallManagementCard group={group} />
+          ) : (
+            <div>
+              {group.instances.map((instance) => (
+                <InstanceRow
+                  key={instance.instanceId}
+                  instance={instance}
+                  buildingName={group.name}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -1,20 +1,13 @@
-import buildingMap from "@/constants/building_map.json";
 import {
   buildUpgradePath,
   calculateTotalPendingUpgrades,
+  getMaxLevel,
+  getUpgradeBuilding,
   type Currency,
   type UpgradeStep,
 } from "@/lib/calculator";
 
-export type BuildingMap = Record<string, string>;
-
 export const TOWN_HALL_ID = "1000001";
-export const ALLOWED_BUILDING_IDS = new Set([
-  "1000008", "1000009", // Cannon, Archer Tower
-  "1000011", "1000012", "1000013", // Wizard Tower, Air Defense, Mortar
-  "1000014", "1000016", "1000019", // X-Bow, Inferno Tower, Hidden Tesla
-  "1000023", "1000028" // Bomb Tower, Air Sweeper
-]);
 
 export interface RawBuildingEntry {
   data: number;
@@ -26,6 +19,7 @@ export interface BuildingInstance {
   instanceId: string;
   instanceNumber: number;
   level: number;
+  maxLevel: number;
   upgradePath: UpgradeStep[];
   totalCost: number;
   totalTimeSeconds: number;
@@ -47,6 +41,8 @@ export interface BuildingGroup {
   minLevel: number;
   maxLevelAmongBuildings: number;
   totalPendingUpgrades: number;
+  isWall: boolean;
+  maxLevel: number;
 }
 
 export interface TimeStats {
@@ -72,7 +68,7 @@ export class ParseError extends Error {
   }
 }
 
-const map = buildingMap as BuildingMap;
+const BUILDER_HUT_ID = "1000017";
 
 interface LevelInstance {
   level: number;
@@ -84,44 +80,60 @@ interface GroupAccumulator {
   instances: LevelInstance[];
 }
 
-function resolveBuildingName(dataId: number): string | null {
-  return map[String(dataId)] ?? null;
-}
-
 function extractEntries(raw: unknown): RawBuildingEntry[] {
+  const collect = (items: unknown[]): RawBuildingEntry[] =>
+    items
+      .map(parseBuildingEntry)
+      .filter((entry): entry is RawBuildingEntry => entry !== null);
+
   if (Array.isArray(raw)) {
-    return raw.filter(isBuildingEntry);
+    return collect(raw);
   }
 
   if (raw && typeof raw === "object") {
     const obj = raw as Record<string, unknown>;
 
-    if (Array.isArray(obj.buildings)) {
-      return obj.buildings.filter(isBuildingEntry);
+    if (Array.isArray(obj.buildings) || Array.isArray(obj.buildings2)) {
+      const buildings = Array.isArray(obj.buildings) ? obj.buildings : [];
+      const buildings2 = Array.isArray(obj.buildings2) ? obj.buildings2 : [];
+      return collect([...buildings, ...buildings2]);
     }
 
     if (Array.isArray(obj.data)) {
-      return obj.data.filter(isBuildingEntry);
+      return collect(obj.data);
     }
 
     if (obj.player && typeof obj.player === "object") {
       const player = obj.player as Record<string, unknown>;
-      if (Array.isArray(player.buildings)) {
-        return player.buildings.filter(isBuildingEntry);
-      }
+      const playerBuildings = Array.isArray(player.buildings) ? player.buildings : [];
+      const playerBuildings2 = Array.isArray(player.buildings2) ? player.buildings2 : [];
+      return collect([...playerBuildings, ...playerBuildings2]);
     }
   }
 
   return [];
 }
 
-function isBuildingEntry(value: unknown): value is RawBuildingEntry {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "data" in value &&
-    typeof (value as RawBuildingEntry).data === "number"
-  );
+function parseNumber(value: unknown): number | null {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+function parseBuildingEntry(value: unknown): RawBuildingEntry | null {
+  if (typeof value !== "object" || value === null) return null;
+
+  const entry = value as Record<string, unknown>;
+  const data = parseNumber(entry.data ?? entry.id);
+  if (data === null) return null;
+
+  const cnt = parseNumber(entry.cnt ?? entry.count) ?? 1;
+  const lvl = parseNumber(entry.lvl ?? entry.level) ?? 1;
+
+  return { data, cnt, lvl };
 }
 
 function detectTownHallLevel(entries: RawBuildingEntry[]): number | null {
@@ -131,12 +143,19 @@ function detectTownHallLevel(entries: RawBuildingEntry[]): number | null {
   return thEntry?.lvl ?? null;
 }
 
+function detectBuilderCount(entries: RawBuildingEntry[]): number | null {
+  const builderEntries = entries.filter((e) => String(e.data) === BUILDER_HUT_ID);
+  if (builderEntries.length === 0) return null;
+
+  return builderEntries.reduce((sum, entry) => sum + (entry.cnt ?? 1), 0);
+}
+
 function groupByBuildingId(entries: RawBuildingEntry[]): GroupAccumulator[] {
   const groups = new Map<string, GroupAccumulator>();
 
   for (const entry of entries) {
     const id = String(entry.data);
-    if (!ALLOWED_BUILDING_IDS.has(id)) continue;
+    if (!getUpgradeBuilding(Number(id))) continue;
 
     const level = entry.lvl ?? 1;
     const count = entry.cnt ?? 1;
@@ -174,9 +193,12 @@ function buildInstanceStatus(
 function buildBuildingGroup(
   group: GroupAccumulator,
   townHallLevel: number | null
-): BuildingGroup {
+): BuildingGroup | null {
   const buildingId = Number(group.id);
-  const name = resolveBuildingName(buildingId) ?? `Bilinmeyen Bina: ${group.id}`;
+  const building = getUpgradeBuilding(buildingId);
+  if (!building) return null;
+
+  const name = building.name;
   const effectiveTH = townHallLevel ?? 1;
 
   // Create individual instances
@@ -203,6 +225,7 @@ function buildBuildingGroup(
         instanceId,
         instanceNumber: instanceCounter,
         level: entry.level,
+        maxLevel: path.absoluteMaxLevel,
         upgradePath: path.steps,
         totalCost: path.totalCost,
         totalTimeSeconds: path.totalTimeSeconds,
@@ -245,6 +268,8 @@ function buildBuildingGroup(
     minLevel,
     maxLevelAmongBuildings,
     totalPendingUpgrades,
+    isWall: buildingId === 1000010,
+    maxLevel: getMaxLevel(buildingId) ?? 0,
   };
 }
 
@@ -264,8 +289,11 @@ export function parseClashData(input: string): ParseResult {
   }
 
   const townHallLevel = detectTownHallLevel(rawEntries);
+  const builderCount = detectBuilderCount(rawEntries) ?? 5;
   const grouped = groupByBuildingId(rawEntries);
-  const groups = grouped.map((g) => buildBuildingGroup(g, townHallLevel));
+  const groups = grouped
+    .map((g) => buildBuildingGroup(g, townHallLevel))
+    .filter((group): group is BuildingGroup => group !== null);
 
   const totalSeconds = groups.reduce(
     (sum, g) => sum + g.totalTimeSeconds,
@@ -276,10 +304,7 @@ export function parseClashData(input: string): ParseResult {
     groups,
     townHallLevel,
     timeStats: { totalSeconds },
-    builderCount: 5,
+    builderCount,
   };
 }
 
-export function getBuildingMap(): BuildingMap {
-  return map;
-}

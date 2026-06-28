@@ -8,7 +8,6 @@ import { GlobalProgress } from "@/components/dashboard/global-progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { useSettings } from "@/lib/settings-context";
 import {
   parseClashData,
   ParseError,
@@ -17,7 +16,6 @@ import {
 import { calculateGlobalStats } from "@/lib/calculator";
 
 export default function HomePage() {
-  const { builderCount } = useSettings();
   const [jsonInput, setJsonInput] = useState("");
   const [showEditor, setShowEditor] = useState(false);
   const [result, setResult] = useState<ParseResult | null>(null);

@@ -223,5 +223,139 @@
       { "level": 11, "required_th": 17, "cost": 16000000, "currency": "gold", "timeInSeconds": 691200 },
       { "level": 12, "required_th": 18, "cost": 26500000, "currency": "gold", "timeInSeconds": 1166400 }
     ]
+  },
+  {
+    "id": 1000031,
+    "name": "Kartal Topu",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 11, "cost": 5000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 2, "required_th": 11, "cost": 6000000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 3, "required_th": 12, "cost": 9000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 4, "required_th": 13, "cost": 10000000, "currency": "gold", "timeInSeconds": 648000 },
+      { "level": 5, "required_th": 14, "cost": 12000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 6, "required_th": 15, "cost": 13000000, "currency": "gold", "timeInSeconds": 777600 },
+      { "level": 7, "required_th": 16, "cost": 14000000, "currency": "gold", "timeInSeconds": 820800 }
+    ]
+  },
+  {
+    "id": 1000067,
+    "name": "Kaya Saçar",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 13, "cost": 8000000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 2, "required_th": 13, "cost": 9000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 3, "required_th": 14, "cost": 11000000, "currency": "gold", "timeInSeconds": 648000 },
+      { "level": 4, "required_th": 15, "cost": 11500000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 5, "required_th": 16, "cost": 12000000, "currency": "gold", "timeInSeconds": 734400 },
+      { "level": 6, "required_th": 17, "cost": 16500000, "currency": "gold", "timeInSeconds": 777600 },
+      { "level": 7, "required_th": 18, "cost": 26500000, "currency": "gold", "timeInSeconds": 1296000 }
+    ]
+  },
+  {
+    "id": 1000010,
+    "name": "Duvar",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 2, "cost": 0, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 2, "required_th": 2, "cost": 1000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 3, "required_th": 3, "cost": 5000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 4, "required_th": 4, "cost": 10000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 5, "required_th": 5, "cost": 20000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 6, "required_th": 6, "cost": 30000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 7, "required_th": 7, "cost": 50000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 8, "required_th": 8, "cost": 75000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 9, "required_th": 9, "cost": 100000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 10, "required_th": 9, "cost": 200000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 11, "required_th": 10, "cost": 500000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 12, "required_th": 11, "cost": 1000000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 13, "required_th": 12, "cost": 1500000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 14, "required_th": 13, "cost": 2000000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 15, "required_th": 14, "cost": 3000000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 16, "required_th": 15, "cost": 4000000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 17, "required_th": 16, "cost": 5000000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 18, "required_th": 17, "cost": 7000000, "currency": "gold", "timeInSeconds": 0 },
+      { "level": 19, "required_th": 18, "cost": 10000000, "currency": "gold", "timeInSeconds": 0 }
+    ]
+  },
+  {
+    "id": 1000017,
+    "name": "İnşaatçı Kulübesi",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 1, "cost": 0, "currency": "gem", "timeInSeconds": 0 },
+      { "level": 2, "required_th": 14, "cost": 3000000, "currency": "gold", "timeInSeconds": 172800 },
+      { "level": 3, "required_th": 14, "cost": 4000000, "currency": "gold", "timeInSeconds": 259200 },
+      { "level": 4, "required_th": 14, "cost": 6000000, "currency": "gold", "timeInSeconds": 345600 },
+      { "level": 5, "required_th": 15, "cost": 7000000, "currency": "gold", "timeInSeconds": 432000 },
+      { "level": 6, "required_th": 16, "cost": 8000000, "currency": "gold", "timeInSeconds": 475200 },
+      { "level": 7, "required_th": 17, "cost": 15500000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 8, "required_th": 18, "cost": 24000000, "currency": "gold", "timeInSeconds": 1123200 }
+    ]
+  },
+  {
+    "id": 1000072,
+    "name": "Büyü Kulesi",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 15, "cost": 9000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 2, "required_th": 15, "cost": 11000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 3, "required_th": 15, "cost": 12000000, "currency": "gold", "timeInSeconds": 734400 },
+      { "level": 4, "required_th": 17, "cost": 27000000, "currency": "gold", "timeInSeconds": 864000 }
+    ]
+  },
+  {
+    "id": 1000077,
+    "name": "Monolit",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 15, "cost": 200000, "currency": "dark_elixir", "timeInSeconds": 604800 },
+      { "level": 2, "required_th": 15, "cost": 250000, "currency": "dark_elixir", "timeInSeconds": 691200 },
+      { "level": 3, "required_th": 16, "cost": 260000, "currency": "dark_elixir", "timeInSeconds": 777600 },
+      { "level": 4, "required_th": 17, "cost": 300000, "currency": "dark_elixir", "timeInSeconds": 950400 },
+      { "level": 5, "required_th": 18, "cost": 470000, "currency": "dark_elixir", "timeInSeconds": 1296000 }
+    ]
+  },
+  {
+    "id": 1000084,
+    "name": "Çoklu Okçu Kulesi",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 16, "cost": 12000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 2, "required_th": 16, "cost": 13000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 3, "required_th": 17, "cost": 17500000, "currency": "gold", "timeInSeconds": 777600 },
+      { "level": 4, "required_th": 18, "cost": 27000000, "currency": "gold", "timeInSeconds": 1209600 }
+    ]
+  },
+  {
+    "id": 1000085,
+    "name": "Seken Top",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 16, "cost": 12000000, "currency": "gold", "timeInSeconds": 604800 },
+      { "level": 2, "required_th": 16, "cost": 13000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 3, "required_th": 17, "cost": 17500000, "currency": "gold", "timeInSeconds": 777600 },
+      { "level": 4, "required_th": 18, "cost": 26500000, "currency": "gold", "timeInSeconds": 1166400 }
+    ]
+  },
+  {
+    "id": 1000079,
+    "name": "Çok Yönlü Kule",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 17, "cost": 17000000, "currency": "gold", "timeInSeconds": 691200 },
+      { "level": 2, "required_th": 17, "cost": 18000000, "currency": "gold", "timeInSeconds": 777600 },
+      { "level": 3, "required_th": 18, "cost": 28000000, "currency": "gold", "timeInSeconds": 1209600 }
+    ]
+  },
+  {
+    "id": 1000089,
+    "name": "Ateşsaçar",
+    "category": "Defense",
+    "levels": [
+      { "level": 1, "required_th": 17, "cost": 17000000, "currency": "gold", "timeInSeconds": 734400 },
+      { "level": 2, "required_th": 17, "cost": 18000000, "currency": "gold", "timeInSeconds": 864000 },
+      { "level": 3, "required_th": 18, "cost": 29000000, "currency": "gold", "timeInSeconds": 1296000 }
+    ]
   }
 ]

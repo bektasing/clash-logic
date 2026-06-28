@@ -52,7 +52,7 @@ export function getUpgradeBuilding(id: number): UpgradeBuilding | undefined {
 export function getMaxLevel(id: number): number | null {
   const building = upgradeIndex.get(id);
   if (!building || building.levels.length === 0) return null;
-  return Math.max(...building.levels.map((l) => l.level));
+  return building.levels.length;
 }
 
 export function getMaxLevelForTH(buildingId: number, thLevel: number): number {
