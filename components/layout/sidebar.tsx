@@ -3,6 +3,7 @@
 import { Shield, Users, Coins, Hammer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCost } from "@/lib/calculator";
+import { useSettings, MIN_BUILDERS, MAX_BUILDERS } from "@/lib/settings-context";
 import type { GlobalStats } from "@/lib/calculator";
 
 interface SidebarProps {
@@ -12,6 +13,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ className, townHallLevel, globalStats }: SidebarProps) {
+  const { builderCount, setBuilderCount } = useSettings();
   return (
     <aside
       className={cn(
@@ -49,9 +51,22 @@ export function Sidebar({ className, townHallLevel, globalStats }: SidebarProps)
             <Users className="size-4 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">İnşaatçılar</span>
           </div>
-          <span className="text-lg font-semibold text-foreground">
-            {globalStats?.builderCount ?? 5}
-          </span>
+          <div className="flex items-center gap-2">
+            <input
+              type="range"
+              min={MIN_BUILDERS}
+              max={MAX_BUILDERS}
+              value={builderCount}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (!Number.isNaN(value)) {
+                  setBuilderCount(value);
+                }
+              }}
+              className="w-full accent-primary"
+            />
+            <span className="text-lg font-semibold text-foreground">{builderCount}</span>
+          </div>
         </div>
 
         {/* Total Upgrades */}

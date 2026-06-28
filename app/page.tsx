@@ -14,8 +14,10 @@ import {
   type ParseResult,
 } from "@/lib/parser";
 import { calculateGlobalStats } from "@/lib/calculator";
+import { useSettings } from "@/lib/settings-context";
 
 export default function HomePage() {
+  const { builderCount: savedBuilderCount } = useSettings();
   const [jsonInput, setJsonInput] = useState("");
   const [showEditor, setShowEditor] = useState(false);
   const [result, setResult] = useState<ParseResult | null>(null);
@@ -83,7 +85,9 @@ export default function HomePage() {
     hasParsed && (!result || result.groups.length === 0);
 
   // Calculate global stats
-  const globalStats = result ? calculateGlobalStats(result.groups, result.builderCount) : null;
+  const globalStats = result
+    ? calculateGlobalStats(result.groups, savedBuilderCount)
+    : null;
 
   const header = (
     <>
